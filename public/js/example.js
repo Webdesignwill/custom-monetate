@@ -1,3 +1,7 @@
+/*
+  http://clearhead.me/a-new-monetate-polling-pattern-emerges/
+*/
+
 // We wrap the entire thing in an IIFE to ensure we don't leak any variables
 (function() {
   // Define the sigil uptop in the case that jQuery doesn't yet exist at time of script firing
