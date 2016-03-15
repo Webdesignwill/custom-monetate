@@ -1,0 +1,64 @@
+
+.exit-intent-backdrop {
+
+  -webkit-transition: opacity 350ms;
+  -moz-transition: opacity 350ms;
+  -o-transition: opacity 350ms;
+  transition: opacity 350ms;
+
+  background-color:#000;
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  opacity: 0;
+  height:0;
+  overflow:hidden;
+  cursor:pointer;
+  z-index:910000;
+}
+
+body.exit-intent-open.exit-intent-closing .exit-intent-backdrop,
+body.exit-intent-open.exit-intent-closing .exit-intent-lightbox {
+  opacity:0;
+}
+
+body.exit-intent-open .exit-intent-backdrop {
+  height:auto;
+  opacity:0.8;
+}
+
+body.exit-intent-open .exit-intent-lightbox {
+  height:auto;
+  opacity:1;
+}
+
+.exit-intent-lightbox {
+  z-index: 920000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  height:0;
+}
+
+.exit-intent-lightbox .ei-lb-close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.exit-intent-lightbox .ei-lb-inner {
+  width: 500px;
+  position: absolute;
+  top: calc(50% / 2);
+  left: calc(50% - 250px);
+  background-color: #EEE;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-content {
+  padding: 20px;
+}
