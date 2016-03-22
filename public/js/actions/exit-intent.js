@@ -3,8 +3,11 @@ $(document).ready(function () {
 
   "use strict";
 
-  var exitIntentHtml = '<div class="exit-intent-lightbox"><div class="ei-lb-inner"><button type="button" class="ei-lb-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="ei-lb-content"><h3>Lightbox</h3><p>Some nice lightbox content for the Goldsmiths site</p><form role="form"><input type="email" placeholder="Enter your email" /><button type="submit">Save Email</button></form></div></div></div>';
-  var thanksHtml = '<h3>Lightbox</h3><p>Thanks loads! Loved it</p>';
+  var lightboxOpen = false;
+  var sending = false;
+
+  var exitIntentHtml = '<div class="exit-intent-lightbox"><div class="ei-lb-inner ei-lb-front"><button type="button" class="ei-lb-close" data-dismiss="modal" aria-label="Close"></button><div class="ei-lb-content"><form role="form" class="ei-lb-form"><input type="email" placeholder="Enter your email" class="ei-lb-input"/><button type="submit" class="ei-lb-submit-btn invalid">GET MY DISCOUNT</button></form></div></div></div>';
+  var thanksHtml = '<div class="ei-lb-continue-cont"><button class="ei-lb-submit-btn ei-lb-continue">CONTINUE</button></div>';
 
   var sensitivity = 20,
     timer = 1000,
@@ -16,23 +19,52 @@ $(document).ready(function () {
         $body = $('body');
 
   function Lightbox (template) {
+
+    var valid = false;
+
     var self = this;
     this.$el = $(template);
     this.$form = this.$el.find('form');
     this.$close = this.$el.find('.ei-lb-close');
     this.$content = this.$el.find('.ei-lb-content');
+    this.$inner = this.$el.find('.ei-lb-inner');
+    this.$button = this.$el.find('.ei-lb-submit-btn');
+    this.$input = this.$el.find('.ei-lb-input');
+
+    function done (data, status, xhr) {
+      self.$inner.removeClass('ei-lb-front');
+      self.$inner.addClass('ei-lb-back');
+      self.$content.html(thanksHtml);
+      sending = false;
+    }
 
     function close () {
       $body.addClass('exit-intent-closing');
       setTimeout(function () {
         $body.removeClass('exit-intent-open exit-intent-closing');
         self.$el.off().remove();
+        lightboxOpen = false;
       }, 400);
+    }
+
+    function makeValid () {
+      self.$button.removeClass('invalid');
+      valid = true;
+    }
+
+    function makeInvalid () {
+      self.$button.addClass('invalid');
+      valid = false;
     }
 
     function submit (e) {
       e.preventDefault();
+      if(sending || !valid) { return; }
+
       var val = e.target.querySelector('input').value;
+      self.$button.addClass('ei-lb-sending');
+      self.$button.html('Sending . . .');
+      sending = true;
 
       $.ajax({
         context : self,
@@ -40,17 +72,27 @@ $(document).ready(function () {
         url : 'https://mailify-production.herokuapp.com/api/1.0/subscriptions/',
         crossDomain : true,
         data : { email : val },
-        success : function () {
-          self.$content.html(thanksHtml);
-        },
-        error : function () {
-          self.$content.html(thanksHtml);
-        }
+        success : done,
+        error : done
       });
+    }
+
+    this.$content.on('click', function (e) {
+      if(e.target.className.indexOf('ei-lb-continue') !== -1) {
+        close();
+      }
+    });
+
+    function validate (e) {
+      if(e.target.value.indexOf('@') === -1 ? false : true) {
+        return makeValid();
+      }
+      makeInvalid();
     }
 
     this.$close.on('click', close);
     this.$form.on('submit', submit);
+    this.$input.on('keyup', validate);
 
     $body.append(this.$el);
   }
@@ -65,7 +107,12 @@ $(document).ready(function () {
   }
 
   function fire() {
+
+    if(lightboxOpen) { return; }
+
     $body.addClass('exit-intent-open');
+    lightboxOpen = true;
+
     new Lightbox(exitIntentHtml);
   }
 
@@ -89,5 +136,25 @@ $(document).ready(function () {
   setTimeout(appendPopup, timer);
 
   $body.append($backdrop);
+
+  var $imgContainer = $('<span />').css('display', 'none');
+
+  var images = [
+    '/img/back.png',
+    '/img/front.png'
+  ];
+
+  function getImage (src) {
+    var image = new Image();
+    image.src = src;
+
+    image.onload = function () {
+      $imgContainer.append(image);
+    };
+  }
+
+  for(var i = 0; i < images.length; i++) {
+    getImage(images[i]);
+  }
 
 });

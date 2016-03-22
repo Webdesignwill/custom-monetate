@@ -1,4 +1,8 @@
 
+*:focus {
+    outline: none;
+}
+
 .exit-intent-backdrop {
 
   -webkit-transition: opacity 350ms;
@@ -46,19 +50,90 @@ body.exit-intent-open .exit-intent-lightbox {
 }
 
 .exit-intent-lightbox .ei-lb-close {
+  background: url('/img/btn.png') no-repeat center center;
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 82px;
+  top: 33px;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
 }
 
 .exit-intent-lightbox .ei-lb-inner {
-  width: 500px;
+  width:490px;
+  height:496px;
+  top: calc(50% - 248px);
+  left: calc(50% - 245px);
   position: absolute;
-  top: calc(50% / 2);
-  left: calc(50% - 250px);
   background-color: #EEE;
 }
 
 .exit-intent-lightbox .ei-lb-inner .ei-lb-content {
-  padding: 20px;
+  text-align:center;
+  min-height:100%;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-form {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  text-align:center;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-form input {
+  width:80%;
+  height:44px;
+  border: 1px solid black;
+  margin-bottom:13px;
+  text-align:center;
+  color:#BCBCBC;
+  font-size:20px;
+}
+.exit-intent-lightbox .ei-lb-inner .ei-lb-submit-btn {
+  width:46%;
+  height:43px;
+  border: none;
+  background-color: black;
+  font-size:18px;
+  color: #FFB200;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-submit-btn:hover,
+.exit-intent-lightbox .ei-lb-inner .ei-lb-submit-btn:focus,
+.exit-intent-lightbox .ei-lb-inner .ei-lb-submit-btn:active {
+  background-color:#303030;
+}
+
+.exit-intent-lightbox .ei-lb-inner .invalid {
+  opacity:0.8;
+}
+.exit-intent-lightbox .ei-lb-inner .invalid:hover,
+.exit-intent-lightbox .ei-lb-inner .invalid:active,
+.exit-intent-lightbox .ei-lb-inner .invalid:focus {
+  cursor:default;
+  background-color:black;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-sending,
+.exit-intent-lightbox .ei-lb-inner .ei-lb-sending:hover,
+.exit-intent-lightbox .ei-lb-inner .ei-lb-sending:active,
+.exit-intent-lightbox .ei-lb-inner .ei-lb-sending:focus {
+  background-color:#BCBCBC;
+  color:black;
+  cursor:default;
+}
+
+.exit-intent-lightbox .ei-lb-inner .ei-lb-continue-cont {
+  position: absolute;
+  width: 100%;
+  top: 56%;
+}
+
+.exit-intent-lightbox .ei-lb-inner.ei-lb-front {
+  background: url('/img/front.png') no-repeat center center;
+}
+.exit-intent-lightbox .ei-lb-inner.ei-lb-back {
+  background: url('/img/back.png') no-repeat center center;
 }
