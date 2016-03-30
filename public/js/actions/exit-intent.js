@@ -1,5 +1,5 @@
 
-$(document).ready(function () {
+(function () {
 
   "use strict";
 
@@ -10,7 +10,7 @@ $(document).ready(function () {
   var thanksHtml = '<div class="ei-lb-continue-cont"><button class="ei-lb-submit-btn ei-lb-continue">CONTINUE</button></div>';
 
   var sensitivity = 20,
-    timer = 1000,
+    timer = 2500,
     delay = 0,
     _delayTimer = null,
     _html = document.documentElement;
@@ -59,6 +59,7 @@ $(document).ready(function () {
 
     function submit (e) {
       e.preventDefault();
+      e.stopPropagation();
       if(sending || !valid) { return; }
 
       var val = e.target.querySelector('input').value;
@@ -68,7 +69,7 @@ $(document).ready(function () {
 
       $.ajax({
         context : self,
-        method : 'POST',
+        type : 'POST',
         url : 'https://mailify-production.herokuapp.com/api/1.0/subscriptions/',
         crossDomain : true,
         data : { email : val },
@@ -107,7 +108,6 @@ $(document).ready(function () {
   }
 
   function fire() {
-
     if(lightboxOpen) { return; }
 
     $body.addClass('exit-intent-open');
@@ -140,8 +140,9 @@ $(document).ready(function () {
   var $imgContainer = $('<span />').css('display', 'none');
 
   var images = [
-    '/img/back.png',
-    '/img/front.png'
+    'http://sb.monetate.net/img/1/669/573814.png', // front
+    'http://sb.monetate.net/img/1/669/573812.png', // back
+    'http://sb.monetate.net/img/1/669/568232.png'
   ];
 
   function getImage (src) {
@@ -157,4 +158,4 @@ $(document).ready(function () {
     getImage(images[i]);
   }
 
-});
+})();

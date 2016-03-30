@@ -50,7 +50,7 @@ body.exit-intent-open .exit-intent-lightbox {
 }
 
 .exit-intent-lightbox .ei-lb-close {
-  background: url('/img/btn.png') no-repeat center center;
+  background: url('http://sb.monetate.net/img/1/669/568232.png') no-repeat center center;
   position: absolute;
   right: 82px;
   top: 33px;
@@ -132,8 +132,8 @@ body.exit-intent-open .exit-intent-lightbox {
 }
 
 .exit-intent-lightbox .ei-lb-inner.ei-lb-front {
-  background: url('/img/front.png') no-repeat center center;
+  background: url('http://sb.monetate.net/img/1/669/573814.png') no-repeat center center;
 }
 .exit-intent-lightbox .ei-lb-inner.ei-lb-back {
-  background: url('/img/back.png') no-repeat center center;
+  background: url('http://sb.monetate.net/img/1/669/573812.png') no-repeat center center;
 }
