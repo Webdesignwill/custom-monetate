@@ -1,4 +1,8 @@
 
+body {
+  font-family:'Libre Baskerville', serif;
+}
+
 *:focus {
     outline: none;
 }
@@ -36,6 +40,7 @@ body.exit-intent-open .exit-intent-backdrop {
 body.exit-intent-open .exit-intent-lightbox {
   height:auto;
   opacity:1;
+  cursor:pointer;
 }
 
 .exit-intent-lightbox {
@@ -59,6 +64,17 @@ body.exit-intent-open .exit-intent-lightbox {
   width: 32px;
   height: 32px;
 }
+.exit-intent-lightbox .voucher-code {
+  background: white;
+  width: 80%;
+  height: 45px;
+  padding-top: 10px;
+  line-height:initial;
+  margin: 0 auto 10px auto;
+  font-size: 22px;
+  cursor: text;
+  text-transform: uppercase;
+}
 
 .exit-intent-lightbox .ei-lb-inner {
   width:490px;
@@ -67,6 +83,7 @@ body.exit-intent-open .exit-intent-lightbox {
   left: calc(50% - 245px);
   position: absolute;
   background-color: #EEE;
+  cursor:default;
 }
 
 .exit-intent-lightbox .ei-lb-inner .ei-lb-content {
@@ -128,7 +145,7 @@ body.exit-intent-open .exit-intent-lightbox {
 .exit-intent-lightbox .ei-lb-inner .ei-lb-continue-cont {
   position: absolute;
   width: 100%;
-  top: 56%;
+  top: 45%;
 }
 
 .exit-intent-lightbox .ei-lb-inner.ei-lb-front {

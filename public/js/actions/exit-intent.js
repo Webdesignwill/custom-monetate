@@ -7,7 +7,7 @@
   var sending = false;
 
   var exitIntentHtml = '<div class="exit-intent-lightbox"><div class="ei-lb-inner ei-lb-front"><button type="button" class="ei-lb-close" data-dismiss="modal" aria-label="Close"></button><div class="ei-lb-content"><form role="form" class="ei-lb-form"><input type="email" placeholder="Enter your email" class="ei-lb-input"/><button type="submit" class="ei-lb-submit-btn invalid">GET MY DISCOUNT</button></form></div></div></div>';
-  var thanksHtml = '<div class="ei-lb-continue-cont"><button class="ei-lb-submit-btn ei-lb-continue">CONTINUE</button></div>';
+  var thanksHtml = '<div class="ei-lb-continue-cont"><div class="voucher-code"></div><button class="ei-lb-submit-btn ei-lb-continue">CONTINUE</button></div>';
 
   var sensitivity = 20,
     timer = 2500,
@@ -15,8 +15,10 @@
     _delayTimer = null,
     _html = document.documentElement;
 
-  var $backdrop = $('<div class="exit-intent-backdrop"></div>'),
-        $body = $('body');
+  var $body = $('body'),
+        $backdrop = $('<div class="exit-intent-backdrop"></div>');
+
+  $body.append($backdrop);
 
   function Lightbox (template) {
 
@@ -35,6 +37,7 @@
       self.$inner.removeClass('ei-lb-front');
       self.$inner.addClass('ei-lb-back');
       self.$content.html(thanksHtml);
+      self.$content.find('.voucher-code').html(data.voucher);
       sending = false;
     }
 
@@ -96,6 +99,14 @@
     this.$input.on('keyup', validate);
 
     $body.append(this.$el);
+
+    this.$el.on('click', function (e) {
+      if(e.target.className === 'exit-intent-lightbox') {
+        close();
+      }
+    });
+
+    return close;
   }
 
   function setDefaultCookieExpire() {
@@ -134,8 +145,6 @@
   }
 
   setTimeout(appendPopup, timer);
-
-  $body.append($backdrop);
 
   var $imgContainer = $('<span />').css('display', 'none');
 
