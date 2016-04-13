@@ -10,15 +10,14 @@
   var thanksHtml = '<div class="ei-lb-continue-cont"><div class="voucher-code"></div><button class="ei-lb-submit-btn ei-lb-continue">CONTINUE</button></div>';
 
   var sensitivity = 20,
-    timer = 2500,
+    initialTimer = 8,
+    cookieExpire = 28,
+    tempDelay = 15,
     delay = 0,
-    _delayTimer = null,
     _html = document.documentElement;
 
   var $body = $('body'),
         $backdrop = $('<div class="exit-intent-backdrop"></div>');
-
-  $body.append($backdrop);
 
   function Lightbox (template) {
 
@@ -38,6 +37,7 @@
       self.$inner.addClass('ei-lb-back');
       self.$content.html(thanksHtml);
       self.$content.find('.voucher-code').html(data.voucher);
+      createCookie("goldsmiths_shown", "true", cookieExpire);
       sending = false;
     }
 
@@ -109,62 +109,91 @@
     return close;
   }
 
-  function setDefaultCookieExpire() {
-    var ms = 14*24*60*60*1000;
+  function getCookie (name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(";");
 
-    var date = new Date();
-    date.setTime(date.getTime() + ms);
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1, c.length);
+      }
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
 
-    return "; expires=" + date.toUTCString();
+    return null;
+  }
+
+  function createCookie (name, value, days, temp) {
+
+    var expires = "";
+
+    if(days) {
+      var date = new Date();
+      if(temp) {
+        date.setTime(date.getTime() + (temp * 60 * 1000));
+      } else {
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      }
+      expires = "; expires=" + date.toUTCString();
+    }
+
+    document.cookie = name + "=" + value + expires + "; path=/";
+
   }
 
   function fire() {
-    if(lightboxOpen) { return; }
+    if(lightboxOpen || getCookie("goldsmiths_shown") || getCookie("goldsmiths_delay")) { return; }
 
     $body.addClass('exit-intent-open');
     lightboxOpen = true;
 
     new Lightbox(exitIntentHtml);
+
+    createCookie("goldsmiths_delay", "true", 0.05, tempDelay);
+
   }
 
   function handleMouseleave(e) {
     if (e.clientY > sensitivity) { return; }
-    _delayTimer = setTimeout(fire, delay);
+    setTimeout(fire, delay);
   }
 
-  function handleMouseenter() {
-    if (_delayTimer) {
-      clearTimeout(_delayTimer);
-      _delayTimer = null;
+  function setListeners() {
+    _html.addEventListener('mouseleave', handleMouseleave);
+  }
+
+  function preLoadImages () {
+    var $imgContainer = $('<span />').css('display', 'none');
+
+    var images = [
+      'http://sb.monetate.net/img/1/669/573814.png', // front
+      'http://sb.monetate.net/img/1/669/573812.png', // back
+      'http://sb.monetate.net/img/1/669/568232.png'
+    ];
+
+    function getImage (src) {
+      var image = new Image();
+      image.src = src;
+
+      image.onload = function () {
+        $imgContainer.append(image);
+      };
+    }
+
+    for(var i = 0; i < images.length; i++) {
+      getImage(images[i]);
     }
   }
 
-  function appendPopup() {
-    _html.addEventListener('mouseleave', handleMouseleave);
-    _html.addEventListener('mouseenter', handleMouseenter);
+  if(getCookie() === "true") {
+    return;
   }
 
-  setTimeout(appendPopup, timer);
-
-  var $imgContainer = $('<span />').css('display', 'none');
-
-  var images = [
-    'http://sb.monetate.net/img/1/669/573814.png', // front
-    'http://sb.monetate.net/img/1/669/573812.png', // back
-    'http://sb.monetate.net/img/1/669/568232.png'
-  ];
-
-  function getImage (src) {
-    var image = new Image();
-    image.src = src;
-
-    image.onload = function () {
-      $imgContainer.append(image);
-    };
-  }
-
-  for(var i = 0; i < images.length; i++) {
-    getImage(images[i]);
-  }
+  preLoadImages();
+  $body.append($backdrop);
+  setTimeout(setListeners, initialTimer * 1000);
 
 })();
